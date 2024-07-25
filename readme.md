@@ -17,6 +17,10 @@
 
 > dotnet add package Serilog.Sinks.Console
 
+> dotnet add package Serilog.AspNetcore
+
+> dotnet add package Serilog.Sinks.OpenTelemetry --version 3.0.0
+
 ```
 
 
