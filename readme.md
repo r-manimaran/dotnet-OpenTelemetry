@@ -12,8 +12,16 @@
 
 > dotnet add package OpenTelemetry.Instrumentation.AspNetCore --version 1.9.0
 
+# Adding Serilog instead of default logging 
+> dotnet add package Serilog.Extensions.Logging
+
+> dotnet add package Serilog.Sinks.Console
+
 ```
 
 
-## Push Logs to Seq
+## Push Default Logging to Seq
 ![alt text](image.png)
+
+### used Serilog to Seq
+![alt text](image-1.png)

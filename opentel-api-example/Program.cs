@@ -2,11 +2,37 @@ using opentel;
 using OpenTelemetry.Exporter;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Resources;
+using Serilog.Sinks.OpenTelemetry;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+// Used Serilog logging along with OpenTelemtry and Seq
+Log.Logger = new LoggerConfiguration()
+    .Enrich.FromLogContext()
+    .WriteTo.Console()
+    .WriteTo.OpenTelemetry(options =>
+    {
+        options.ResourceAttributes = new Dictionary<string, object>
+        {
+            { "service.name", "weatherapi" },
+            { "service.instance.id", Environment.MachineName }
+        };
+        options.Endpoint = "http://localhost:5341/ingest/otlp/v1/logs";
+        options.Protocol = OtlpProtocol.HttpProtobuf;
+        options.Headers = new Dictionary<string, string>
+        {
+            ["X-Seq-ApiKey"]= "VySRbfZx4pUMZ67coP6g"
+        };
+    })
+    .CreateLogger();
+
+builder.Services.AddSerilog();
+
 //Register the OpenTelemetry from Extesion Helper method
-builder.RegisterOpenTelemetry();
+//Used Default Logging, OpenTelemetry and logged to Seq
+//builder.RegisterOpenTelemetry();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
